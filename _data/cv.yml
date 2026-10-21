@@ -19,21 +19,21 @@ cv:
         url: https://www.gatech.edu/
         area: Machine Learning
         studyType: Ph.D.
-        start_date: 2025
+        start_date: 2024-09
         end_date: present
         highlights:
-          - "Advisor: Prof. Pascal Van Hentenryck. Graduate Research Assistant, AI4OPT."
-          - "Expected graduation: 2029. GPA: 3.72 / 4.00"
+          - "Doctoral advisor: Prof. Pascal Van Hentenryck. Graduate Research Assistant, AI4OPT."
+          - "Expected graduation: August 2029. GPA: 3.72 / 4.00"
 
       - institution: Georgia Institute of Technology
         location: Atlanta, GA
         url: https://www.gatech.edu/
         area: Computer Science
         studyType: M.S.
-        start_date: 2025
-        end_date: 2026
+        start_date: 2024-09
+        end_date: 2026-08
         highlights:
-          - "GPA: 3.72 / 4.00"
+          - "Degree conferred August 2026. GPA: 3.72 / 4.00"
 
       - institution: Sharif University of Technology
         location: Tehran, Iran
@@ -50,7 +50,7 @@ cv:
       - company: AI4OPT, Georgia Institute of Technology
         position: Graduate Research Assistant
         location: Atlanta, GA
-        start_date: 2024-09
+        start_date: 2024-08
         end_date: present
         highlights:
           - Probabilistic forecasting, conformal prediction, and uncertainty quantification for large-scale energy systems, advised by Prof. Pascal Van Hentenryck.
@@ -59,10 +59,19 @@ cv:
       - company: Sharif University of Technology
         position: Undergraduate Research Assistant
         location: Tehran, Iran
-        start_date: 2022-09
+        start_date: 2022-10
         end_date: 2024-06
         highlights:
-          - Developed probabilistic electricity-demand forecasting models using quantile regression and machine learning, with supply-risk analysis (published in Reliability Engineering & System Safety).
+          - "Supervisor: Dr. Nafiseh Sedghi."
+          - Uncertainty prediction for time series using quantile regression; developed probabilistic electricity-demand forecasting models with supply-risk analysis (published in Reliability Engineering & System Safety).
+
+      - company: Kharazmi University, Macrosystems Modeling and Simulation Lab
+        position: Research Assistant
+        location: Tehran, Iran
+        start_date: 2022-08
+        end_date: 2023-09
+        highlights:
+          - "Supervisor: Prof. Hamidreza Izadbakhsh."
 
     Industry Collaborations:
       - company: Réseau de Transport d'Électricité (RTE), France
@@ -96,11 +105,13 @@ cv:
         position: Teaching Assistant, Systems Analysis
         start_date: 2024-01
         end_date: 2024-05
+        highlights:
+          - "Instructor: Prof. Saeid Saidi."
 
       - company: Sharif University of Technology
         position: Teaching Assistant
-        start_date: 2020-09
-        end_date: 2022-06
+        start_date: 2021-09
+        end_date: 2024-06
         highlights:
           - Simulation, Operations Research, Transportation Planning, and Python Programming.
 

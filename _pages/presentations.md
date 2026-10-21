@@ -4,7 +4,7 @@ permalink: /presentations/
 title: presentations
 description: Talks and posters at conferences and workshops.
 nav: true
-nav_order: 4
+nav_order: 5
 ---
 
 {% for p in site.data.presentations %}

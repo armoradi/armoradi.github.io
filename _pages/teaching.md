@@ -4,7 +4,7 @@ permalink: /teaching/
 title: teaching
 description: Teaching, mentoring, and outreach.
 nav: true
-nav_order: 5
+nav_order: 6
 ---
 
 #### Instructor, AI for Time Series Forecasting, Georgia Institute of Technology
@@ -23,10 +23,10 @@ Taught (2025) and led the instructional team (2026) of an AI and data science ou
 
 _January – May 2024_
 
-Systems Analysis.
+Systems Analysis (instructor: Prof. Saeid Saidi).
 
 #### Teaching Assistant, Sharif University of Technology
 
-_September 2020 – June 2022_
+_September 2021 – June 2024_
 
 Simulation, Operations Research, Transportation Planning, and Python Programming.
