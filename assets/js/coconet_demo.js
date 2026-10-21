@@ -63,55 +63,59 @@
     el("cc-alpha-val").textContent = fmt(state.alpha, 2);
     el("cc-target").textContent = Math.round(100 * (1 - state.alpha)) + "%";
     el("cc-stats").innerHTML =
-      `threshold τ̂ = <b>${fmt(tau)}</b> &nbsp;·&nbsp; calibration coverage <b>${fmt(100 * cov, 1)}%</b>` +
+      `threshold τ<sub>α</sub> = <b>${fmt(tau)}</b> &nbsp;·&nbsp; calibration coverage <b>${fmt(100 * cov, 1)}%</b>` +
       ` &nbsp;·&nbsp; region area <b>${fmt(area, 2)}</b> &nbsp;(true region ${fmt(polyArea(truth), 2)})`;
 
     const inside = { x: [], y: [] }, outside = { x: [], y: [] };
     d.pts.forEach(([x, y], k) => { (m.h[k] <= tau ? inside : outside).x.push(x); (m.h[k] <= tau ? inside : outside).y.push(y); });
     const zmax = Math.max(2.5, 1.6 * tau);
+    const Zs = m.Z.map((row) => row.map((v) => Math.min(v, zmax)));
+    const inSet = m.Z.map((row) => row.map((v) => (v <= tau ? 1 : null)));
 
     // 3-D: the score surface, the threshold plane and the region on the floor
     const plane = d.y.map(() => d.x.map(() => tau));
     const surf = [
-      { type: "surface", x: d.x, y: d.y, z: m.Z, cmin: 0, cmax: zmax, showscale: false, opacity: 0.92,
-        colorscale: [[0, "#f4f8fb"], [0.5, "#9cc3dc"], [1, m.color]],
-        contours: { z: { show: true, start: tau, end: tau, size: 1, color: m.color, width: 6 } },
+      { type: "surface", x: d.x, y: d.y, z: Zs, cmin: 0, cmax: zmax, showscale: false, opacity: 0.9,
+        colorscale: [[0, "#fbfbfd"], [0.6, "#c9d9ea"], [1, "#7fa3c8"]],
+        contours: { z: { show: true, start: tau, end: tau + 1e-4, size: 1e-3, color: m.color, width: 6, project: { z: true } } },
         hovertemplate: "r₁ %{x:.2f}<br>r₂ %{y:.2f}<br>score %{z:.2f}<extra></extra>" },
       { type: "surface", x: d.x, y: d.y, z: plane, showscale: false, opacity: 0.35, hoverinfo: "skip",
         colorscale: [[0, "#f2b134"], [1, "#f2b134"]] },
       { type: "scatter3d", mode: "markers", x: inside.x, y: inside.y, z: inside.x.map(() => 0), hoverinfo: "skip",
-        marker: { size: 1.8, color: C_IN } },
+        marker: { size: 2.2, color: C_IN } },
       { type: "scatter3d", mode: "markers", x: outside.x, y: outside.y, z: outside.x.map(() => 0), hoverinfo: "skip",
-        marker: { size: 1.8, color: C_OUT } },
+        marker: { size: 2.2, color: C_OUT } },
     ];
     const ax3 = (title) => ({ title: { text: title }, color: t.text, gridcolor: t.grid, zerolinecolor: t.grid, backgroundcolor: "rgba(0,0,0,0)" });
     Plotly.react(el("cc-3d"), surf, {
       margin: { l: 0, r: 0, t: 30, b: 0 }, paper_bgcolor: "rgba(0,0,0,0)", showlegend: false,
-      title: { text: "Score S(x, r) and threshold τ̂", font: { size: 14, color: t.text } },
+      title: { text: "Score S(x, r) and threshold τ<sub>α</sub>", font: { size: 14, color: t.text } },
       scene: { xaxis: ax3("r₁"), yaxis: ax3("r₂"), zaxis: Object.assign(ax3("score"), { range: [0, zmax] }),
                camera: { eye: { x: 1.5, y: -1.5, z: 0.9 } }, aspectmode: "manual", aspectratio: { x: 1, y: 1, z: 0.7 } },
-    }, { displaylogo: false, responsive: true });
+    }, { displayModeBar: false, responsive: true });
 
     // 2-D: the prediction region {r : S(x, r) <= tau}, the true region and the calibration residuals
     const tx = truth.map((p) => p[0]).concat([truth[0][0]]), ty = truth.map((p) => p[1]).concat([truth[0][1]]);
     const set = [
-      { type: "contour", x: d.x, y: d.y, z: m.Z, showscale: false, hoverinfo: "skip", name: "region",
-        contours: { type: "constraint", operation: "<", value: tau }, fillcolor: m.color + "33", line: { color: m.color, width: 3 } },
-      { type: "scatter", mode: "lines", x: tx, y: ty, name: "true region", hoverinfo: "skip",
-        line: { color: C_TRUE, width: 2, dash: "dash" } },
+      { type: "heatmap", x: d.x, y: d.y, z: inSet, showscale: false, hoverinfo: "skip", opacity: 0.18,
+        colorscale: [[0, m.color], [1, m.color]] },
+      { type: "contour", x: d.x, y: d.y, z: m.Z, showscale: false, hoverinfo: "skip", name: "region", showlegend: true,
+        contours: { coloring: "none", start: tau, end: tau + 1e-4, size: 1e-3 }, line: { color: m.color, width: 3 } },
       { type: "scatter", mode: "markers", x: inside.x, y: inside.y, name: "inside", hoverinfo: "skip",
         marker: { size: 4, color: C_IN, opacity: 0.7 } },
       { type: "scatter", mode: "markers", x: outside.x, y: outside.y, name: "outside", hoverinfo: "skip",
         marker: { size: 5, color: C_OUT, symbol: "x-thin", line: { width: 1.2, color: C_OUT } } },
+      { type: "scatter", mode: "lines", x: tx, y: ty, name: "true region", hoverinfo: "skip",
+        line: { color: C_TRUE, width: 2.5, dash: "dash" } },
     ];
     const ax2 = (title) => ({ title: { text: title }, color: t.text, gridcolor: t.grid, zerolinecolor: t.grid,
                               range: [d.x[0], d.x[d.x.length - 1]] });
     Plotly.react(el("cc-set"), set, {
       margin: { l: 45, r: 10, t: 30, b: 40 }, paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
       title: { text: "Prediction region at x", font: { size: 14, color: t.text } },
-      xaxis: ax2("r₁"), yaxis: Object.assign(ax2("r₂"), { scaleanchor: "x", scaleratio: 1 }),
+      xaxis: Object.assign(ax2("r₁"), { constrain: "domain" }), yaxis: Object.assign(ax2("r₂"), { scaleanchor: "x", scaleratio: 1, constrain: "domain" }),
       legend: { orientation: "h", y: -0.18, font: { color: t.text } },
-    }, { displaylogo: false, responsive: true });
+    }, { displayModeBar: false, responsive: true });
   }
 
   buttons("cc-shapes", SHAPES, "shape");

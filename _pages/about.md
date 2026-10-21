@@ -24,14 +24,8 @@ latest_posts:
   enabled: false
 ---
 
-I am a Ph.D. student in Machine Learning at the **Georgia Institute of Technology**, advised by [Prof. Pascal Van Hentenryck](https://www.isye.gatech.edu/users/pascal-van-hentenryck), and a Graduate Research Assistant at the [NSF AI Institute for Advances in Optimization (AI4OPT)](https://www.ai4opt.org/). I also hold an M.S. in Computer Science from Georgia Tech and a B.S. in Industrial Engineering (minor in Computer Science) from Sharif University of Technology.
+I am a Ph.D. student in Machine Learning at the **Georgia Institute of Technology** in Atlanta, GA (since September 2024, expected August 2029), advised by [Prof. Pascal Van Hentenryck](https://www.isye.gatech.edu/users/pascal-van-hentenryck), and a Graduate Research Assistant at the [NSF AI Institute for Advances in Optimization (AI4OPT)](https://www.ai4opt.org/). I received my M.S. in Computer Science from Georgia Tech in August 2026, and my B.S. in Industrial Engineering, with a minor in Computer Science, from Sharif University of Technology in Tehran, Iran (2019–2024).
 
 My research is on **reliable machine learning under uncertainty**: conformal prediction, uncertainty quantification, and probabilistic forecasting, with a focus on renewable energy and power systems.
 
 **Research interests:** conformal prediction · uncertainty quantification · probabilistic and solar forecasting · reliability of AI for energy systems.
-
-#### Education
-
-- **Ph.D. in Machine Learning**, Georgia Institute of Technology, Atlanta, GA, USA (Sep 2024 – present, expected Aug 2029)
-- **M.S. in Computer Science**, Georgia Institute of Technology, Atlanta, GA, USA (Sep 2024 – Aug 2026)
-- **B.S. in Industrial Engineering**, minor in Computer Science, Sharif University of Technology, Tehran, Iran (2019 – 2024)
