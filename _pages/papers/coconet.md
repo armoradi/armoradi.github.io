@@ -27,12 +27,35 @@ _Figures coming soon._
 
 ## Demo
 
-<!--
-Embed a demo here: a video ({% include video.liquid path="assets/video/demo.mp4" controls=true %}),
-an animated GIF via figure.liquid, or an iframe to a hosted app (Hugging Face Space, Colab, etc.).
--->
+Pick a synthetic geometry and a method, then move α. The threshold τ̂ is the split-conformal quantile of the calibration scores, so the prediction region {r : S(x, r) ≤ τ̂} grows or shrinks with the target coverage 1 − α. The dashed line is the true (smallest) region at the same coverage.
 
-_Demo coming soon._
+<style>
+  #cc-demo .cc-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 8px; }
+  #cc-demo .cc-label { min-width: 80px; font-weight: 600; }
+  #cc-demo .cc-btn { border: 1px solid var(--global-divider-color); background: transparent; color: var(--global-text-color);
+    border-radius: 4px; padding: 3px 10px; font-size: 0.9rem; cursor: pointer; }
+  #cc-demo .cc-btn.active { background: var(--global-theme-color); border-color: var(--global-theme-color); color: #fff; }
+  #cc-demo input[type="range"] { flex: 1; min-width: 160px; max-width: 360px; accent-color: var(--global-theme-color); }
+  #cc-demo #cc-stats { font-size: 0.9rem; margin: 4px 0 6px; }
+  #cc-demo .cc-plots { display: grid; grid-template-columns: 1.15fr 1fr; gap: 8px; }
+  #cc-demo .cc-plot { height: 420px; min-width: 0; }
+  @media (max-width: 768px) { #cc-demo .cc-plots { grid-template-columns: 1fr; } #cc-demo .cc-plot { height: 360px; } }
+</style>
+
+<div id="cc-demo" data-base="{{ '/assets/json/coconet_demo/' | relative_url }}">
+  <div class="cc-row"><span class="cc-label">Geometry</span><span id="cc-shapes" class="cc-row" style="margin:0"></span></div>
+  <div class="cc-row"><span class="cc-label">Method</span><span id="cc-methods" class="cc-row" style="margin:0"></span></div>
+  <div class="cc-row"><span class="cc-label">α = <span id="cc-alpha-val">0.10</span></span>
+    <input id="cc-alpha" type="range" min="0.02" max="0.40" step="0.01" value="0.10">
+    <span>target coverage <b id="cc-target">90%</b></span></div>
+  <div id="cc-stats"></div>
+  <div class="cc-plots"><div id="cc-3d" class="cc-plot"></div><div id="cc-set" class="cc-plot"></div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/plotly.js@3.0.1/dist/plotly.min.js" integrity="sha256-oy6Be7Eh6eiQFs5M7oXuPxxm9qbJXEtTpfSI93dW16Q=" crossorigin="anonymous"></script>
+<script src="{{ '/assets/js/coconet_demo.js' | relative_url }}"></script>
+
+<small>Models are the paper's synthetic runs (one seed per geometry); scores are shown at a fixed input x and scaled so that τ̂ = 1 at α = 0.1.</small>
 
 ## Citation
 
