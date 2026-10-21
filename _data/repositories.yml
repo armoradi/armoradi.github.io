@@ -1,7 +1,10 @@
 github_users:
+  - amoradi30
   - armoradi
 
 repo_description_lines_max: 2
 
 github_repos:
   - AI4OPT/TS4PS-RTE7000
+  - amoradi30/RL_Project
+  - amoradi30/Computational_Stats

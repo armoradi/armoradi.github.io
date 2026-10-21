@@ -1,7 +1,7 @@
 cv:
   name: Alireza Moradi
   label: Ph.D. Student in Machine Learning
-  email: amoradi30@gatech.edu
+  email: alirezamoradi@gatech.edu
   location: Atlanta, GA
   image: ""
   summary: Ph.D. student at Georgia Tech (AI4OPT) working on conformal prediction, uncertainty quantification, and probabilistic forecasting for renewable energy systems.
@@ -10,7 +10,7 @@ cv:
     - network: LinkedIn
       username: armoradi
     - network: GitHub
-      username: armoradi
+      username: amoradi30
 
   sections:
     Education:

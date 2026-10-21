@@ -6,7 +6,7 @@ subtitle: Ph.D. student in Machine Learning at <a href='https://www.gatech.edu/'
 
 profile:
   align: right
-  image: prof_pic.jpg
+  image: prof_pic.png
   image_circular: false # crops the image to make it circular
   more_info: >
     <p>Georgia Institute of Technology</p>
