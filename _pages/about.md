@@ -30,7 +30,7 @@ My research is on **reliable machine learning under uncertainty**: conformal pre
 
 - **CoCoNet**, a method for learning convex conformity scores that give efficient multi-dimensional prediction regions with finite-sample coverage guarantees;
 - **Context-Aware Conformal Prediction (CACP)**, which calibrates renewable energy forecasts without retraining the underlying model, evaluated on large-scale systems (MISO, ERCOT, SPP);
-- **Copula-based aggregation** of site-level probabilistic forecasts into calibrated fleet-level forecasts, developed with a U.S. vertically integrated utility.
+- **CoCopula**, which combines copula aggregation with conformal calibration to turn site-level probabilistic forecasts into calibrated fleet-level forecasts, developed with a U.S. vertically integrated utility.
 
 I also led the reconstruction of multi-year, 5-minute nodal injection time series for the ~7,000-bus French transmission grid with RTE ([code](https://github.com/AI4OPT/TS4PS-RTE7000), [data](https://huggingface.co/datasets/OpenSynth/rte7000)).
 
