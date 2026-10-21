@@ -1,9 +1,8 @@
-"AJP":
-  url: https://aapt.scitation.org/journal/ajp
-  color: "#00369f"
+"RESS":
+  url: https://www.sciencedirect.com/journal/reliability-engineering-and-system-safety
 
-"PhysRev":
-  url: https://journals.aps.org/
+"PLOS ONE":
+  url: https://journals.plos.org/plosone/
 
-"Vision":
-  color: "#009f36"
+"IISE":
+  url: https://www.iise.org/annual/

@@ -2,14 +2,31 @@
 layout: page
 permalink: /teaching/
 title: teaching
-description: Course materials, schedules, and resources for classes taught.
+description: Teaching, mentoring, and outreach.
 nav: true
-nav_order: 6
-calendar: true
+nav_order: 4
 ---
 
-This page displays a collection of courses with detailed schedules, materials, and resources. You can organize your courses by years, terms, or topics.
+#### Instructor, AI for Time Series Forecasting, Georgia Institute of Technology
 
-{% include calendar.liquid calendar_id='test@gmail.com' timezone='Asia/Shanghai' %}
+_Spring 2026 – present_
 
-{% include courses.liquid %}
+Mentoring an undergraduate team building a generative AI framework that combines market data and financial news for time-series forecasting.
+
+#### Instructor / Head Instructor, Seth Bonder Camp, AI4OPT, Georgia Tech
+
+_Summer 2025 – Summer 2026_
+
+Taught (2025) and led the instructional team (2026) of an AI and data science outreach camp for high school students.
+
+#### Teaching Assistant, University of Calgary (remote)
+
+_January – May 2024_
+
+Systems Analysis.
+
+#### Teaching Assistant, Sharif University of Technology
+
+_September 2020 – June 2022_
+
+Simulation, Operations Research, Transportation Planning, and Python Programming.
