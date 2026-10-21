@@ -4,7 +4,7 @@ permalink: /teaching/
 title: teaching
 description: Teaching, mentoring, and outreach.
 nav: true
-nav_order: 4
+nav_order: 5
 ---
 
 #### Instructor, AI for Time Series Forecasting, Georgia Institute of Technology

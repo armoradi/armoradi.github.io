@@ -1,0 +1,9 @@
+# One entry per talk or poster, newest first.
+# photos: image files in assets/img/presentations/ (any number; shown two per row)
+- event: SAIL 2026, Summit for AI Institutes Leadership
+  date: 2026
+  type: Poster
+  title: "CoCoNet: Convex Conformal Network for Multi-Dimensional Uncertainty Regions"
+  link: https://arxiv.org/abs/2610.24246
+  photos:
+    - sail2026_coconet_poster.jpg
