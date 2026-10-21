@@ -12,15 +12,15 @@ nav_order: 8
 Georgia Institute of Technology<br>
 Email: [pvh@isye.gatech.edu](mailto:pvh@isye.gatech.edu)
 
-#### Dr. Mathieu Tanneau
-
-Chief Scientist, Fulfillment IQ<br>
-Email: [mathieu.tanneau@gmail.com](mailto:mathieu.tanneau@gmail.com)
-
 #### Dr. Reza Zandehshahvar
 
 Georgia Institute of Technology<br>
 Email: [reza.zandehshahvar@gatech.edu](mailto:reza.zandehshahvar@gatech.edu)
+
+#### Dr. Mathieu Tanneau
+
+Chief Scientist, Fulfillment IQ<br>
+Email: [mathieu.tanneau@gmail.com](mailto:mathieu.tanneau@gmail.com)
 
 #### Dr. Kevin Dalmeijer
 
