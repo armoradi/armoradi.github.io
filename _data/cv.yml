@@ -46,7 +46,7 @@ cv:
           - "Thesis: time series modeling for power system forecasting."
           - "GPA: 3.76 / 4.00"
 
-    Research Experience:
+    Experience:
       - company: AI4OPT, Georgia Institute of Technology
         position: Graduate Research Assistant
         location: Atlanta, GA
@@ -74,46 +74,14 @@ cv:
           - "Supervisor: Prof. Hamidreza Izadbakhsh."
 
     Industry Collaborations:
-      - company: Réseau de Transport d'Électricité (RTE), France
-        position: TS4PS project (PSERC)
-        highlights:
-          - Led the reconstruction of multi-year, 5-minute nodal active-power injection time series for the RTE7000 French transmission grid (~7,000 buses) by capacity-proportional disaggregation of public regional data (eco2mix, ENTSO-E).
-          - Released the open-source pipeline on GitHub (AI4OPT/TS4PS-RTE7000) and the dataset (~12.8B rows, 2021–2023) on Hugging Face (OpenSynth/rte7000).
-
-      - company: U.S. Vertically Integrated Utility
-        position: Solar fleet forecasting
-        highlights:
-          - Developed a calibrated probabilistic aggregation framework that turns site-level solar forecasts from heterogeneous third-party providers into reliable fleet-level forecasts.
-          - Combined copula-based modeling of cross-site dependence with context-aware conformal prediction (CACP), reaching near-nominal coverage with significantly sharper intervals than uncalibrated aggregation.
+      - bullet: "**Réseau de Transport d'Électricité (RTE), France**, TS4PS project (PSERC). Led the reconstruction of multi-year, 5-minute nodal active-power injection time series for the RTE7000 French transmission grid (~7,000 buses) by capacity-proportional disaggregation of public regional data (eco2mix, ENTSO-E). Released the open-source pipeline on [GitHub](https://github.com/AI4OPT/TS4PS-RTE7000) and the dataset (~12.8B rows, 2021–2023) on [Hugging Face](https://huggingface.co/datasets/OpenSynth/rte7000)."
+      - bullet: "**U.S. Vertically Integrated Utility**, solar fleet forecasting. Developed a calibrated probabilistic aggregation framework that turns site-level solar forecasts from heterogeneous third-party providers into reliable fleet-level forecasts, combining copula-based modeling of cross-site dependence with context-aware conformal prediction (CACP) to reach near-nominal coverage with significantly sharper intervals than uncalibrated aggregation."
 
     Teaching:
-      - company: Georgia Institute of Technology
-        position: Instructor, AI for Time Series Forecasting
-        start_date: 2026-01
-        end_date: present
-        highlights:
-          - Mentoring an undergraduate team building a generative AI framework that combines market data and financial news for time-series forecasting.
-
-      - company: Seth Bonder Camp, AI4OPT, Georgia Tech
-        position: Instructor / Head Instructor
-        start_date: 2025-06
-        end_date: 2026-08
-        highlights:
-          - Taught (2025) and led the instructional team (2026) of an AI and data science outreach camp for high school students.
-
-      - company: University of Calgary (remote)
-        position: Teaching Assistant, Systems Analysis
-        start_date: 2024-01
-        end_date: 2024-05
-        highlights:
-          - "Instructor: Prof. Saeid Saidi."
-
-      - company: Sharif University of Technology
-        position: Teaching Assistant
-        start_date: 2021-09
-        end_date: 2024-06
-        highlights:
-          - Simulation, Operations Research, Transportation Planning, and Python Programming.
+      - bullet: "**Instructor, AI for Time Series Forecasting**, Georgia Institute of Technology (Spring 2026 – present). Mentoring an undergraduate team building a generative AI framework that combines market data and financial news for time-series forecasting."
+      - bullet: "**Instructor / Head Instructor, Seth Bonder Camp**, AI4OPT, Georgia Tech (Summer 2025 – Summer 2026). Taught (2025) and led the instructional team (2026) of an AI and data science outreach camp for high school students."
+      - bullet: "**Teaching Assistant, Systems Analysis**, University of Calgary, remote (Jan 2024 – May 2024). Instructor: Prof. Saeid Saidi."
+      - bullet: "**Teaching Assistant**, Sharif University of Technology (Sep 2021 – Jun 2024). Simulation, Operations Research, Transportation Planning, and Python Programming."
 
     Skills:
       - name: Programming
