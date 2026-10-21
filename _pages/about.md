@@ -35,3 +35,9 @@ My research is on **reliable machine learning under uncertainty**: conformal pre
 I also led the reconstruction of multi-year, 5-minute nodal injection time series for the ~7,000-bus French transmission grid with RTE ([code](https://github.com/AI4OPT/TS4PS-RTE7000), [data](https://huggingface.co/datasets/OpenSynth/rte7000)).
 
 **Research interests:** conformal prediction · uncertainty quantification · probabilistic and solar forecasting · reliability of AI for energy systems.
+
+#### Education
+
+- **B.S. in Industrial Engineering**, minor in Computer Science, Sharif University of Technology, Tehran, Iran (2019 – 2024)
+- **M.S. in Computer Science**, Georgia Institute of Technology, Atlanta, GA, USA (Sep 2024 – Aug 2026)
+- **Ph.D. in Machine Learning**, Georgia Institute of Technology, Atlanta, GA, USA (Sep 2024 – present, expected Aug 2029)
