@@ -26,18 +26,12 @@ latest_posts:
 
 I am a Ph.D. student in Machine Learning at the **Georgia Institute of Technology**, advised by [Prof. Pascal Van Hentenryck](https://www.isye.gatech.edu/users/pascal-van-hentenryck), and a Graduate Research Assistant at the [NSF AI Institute for Advances in Optimization (AI4OPT)](https://www.ai4opt.org/). I also hold an M.S. in Computer Science from Georgia Tech and a B.S. in Industrial Engineering (minor in Computer Science) from Sharif University of Technology.
 
-My research is on **reliable machine learning under uncertainty**: conformal prediction, uncertainty quantification, and probabilistic forecasting, with a focus on renewable energy and power systems. Recent work includes:
-
-- **CoCoNet**, a method for learning convex conformity scores that give efficient multi-dimensional prediction regions with finite-sample coverage guarantees;
-- **Context-Aware Conformal Prediction (CACP)**, which calibrates renewable energy forecasts without retraining the underlying model, evaluated on large-scale systems (MISO, ERCOT, SPP);
-- **CoCopula**, which combines copula aggregation with conformal calibration to turn site-level probabilistic forecasts into calibrated fleet-level forecasts, developed with a U.S. vertically integrated utility.
-
-I also led the reconstruction of multi-year, 5-minute nodal injection time series for the ~7,000-bus French transmission grid with RTE ([code](https://github.com/AI4OPT/TS4PS-RTE7000), [data](https://huggingface.co/datasets/OpenSynth/rte7000)).
+My research is on **reliable machine learning under uncertainty**: conformal prediction, uncertainty quantification, and probabilistic forecasting, with a focus on renewable energy and power systems.
 
 **Research interests:** conformal prediction · uncertainty quantification · probabilistic and solar forecasting · reliability of AI for energy systems.
 
 #### Education
 
-- **B.S. in Industrial Engineering**, minor in Computer Science, Sharif University of Technology, Tehran, Iran (2019 – 2024)
-- **M.S. in Computer Science**, Georgia Institute of Technology, Atlanta, GA, USA (Sep 2024 – Aug 2026)
 - **Ph.D. in Machine Learning**, Georgia Institute of Technology, Atlanta, GA, USA (Sep 2024 – present, expected Aug 2029)
+- **M.S. in Computer Science**, Georgia Institute of Technology, Atlanta, GA, USA (Sep 2024 – Aug 2026)
+- **B.S. in Industrial Engineering**, minor in Computer Science, Sharif University of Technology, Tehran, Iran (2019 – 2024)
