@@ -72,11 +72,11 @@ nav: false
 
 <div class="cc-tldr"><b>TL;DR.</b> Instead of fixing the shape of a multivariate conformal region (a box, a ball, an ellipsoid), CoCoNet <i>learns</i> it: a convex score trained to make regions small, followed by split-conformal calibration so that coverage is guaranteed in finite samples.</div>
 
-## Abstract
+<h2>Abstract</h2>
 
-Conformal prediction (CP) provides distribution-free coverage guarantees under exchangeability, but the efficiency of its prediction regions depends critically on the choice of the conformity score. This is particularly important in multivariate regression, where dependencies across output dimensions induce complex joint uncertainty structures. This paper introduces CoCoNet (Convex Conformal Network) for learning convex conformity scores that induce flexible, data-adaptive prediction regions. CoCoNet learns the score from held-out data by optimizing prediction-region efficiency while enforcing convexity with respect to the residual. CoCoNet then applies split-conformal calibration to retain finite-sample coverage guarantees. The paper presents two variants of the method: CoCoNet<sub>Spline</sub>, based on piecewise-linear scores, and CoCoNet<sub>ICNN</sub>, based on Input Convex Neural Networks. Experiments compare CoCoNet with other CP baselines over synthetic and real-world datasets with output dimensions ranging from 2 to 16. Across 8 models and 30 multi-dimensional regression tasks, CoCoNet<sub>ICNN</sub> and CoCoNet<sub>Spline-ℓ₁</sub> achieve the best efficiencies with average ranks of 1.45 and 2.75, respectively. In particular, CoCoNet<sub>ICNN</sub> ranks first on 22 tasks out of 30 in terms of efficiency.
+<p>Conformal prediction (CP) provides distribution-free coverage guarantees under exchangeability, but the efficiency of its prediction regions depends critically on the choice of the conformity score. This is particularly important in multivariate regression, where dependencies across output dimensions induce complex joint uncertainty structures. This paper introduces CoCoNet (Convex Conformal Network) for learning convex conformity scores that induce flexible, data-adaptive prediction regions. CoCoNet learns the score from held-out data by optimizing prediction-region efficiency while enforcing convexity with respect to the residual. CoCoNet then applies split-conformal calibration to retain finite-sample coverage guarantees. The paper presents two variants of the method: CoCoNet<sub>Spline</sub>, based on piecewise-linear scores, and CoCoNet<sub>ICNN</sub>, based on Input Convex Neural Networks. Experiments compare CoCoNet with other CP baselines over synthetic and real-world datasets with output dimensions ranging from 2 to 16. Across 8 models and 30 multi-dimensional regression tasks, CoCoNet<sub>ICNN</sub> and CoCoNet<sub>Spline-ℓ₁</sub> achieve the best efficiencies with average ranks of 1.45 and 2.75, respectively. In particular, CoCoNet<sub>ICNN</sub> ranks first on 22 tasks out of 30 in terms of efficiency.</p>
 
-## How it works
+<h2>How it works</h2>
 
 <div class="cc-steps3">
   <div class="cc-card"><div class="cc-card-title"><b class="cc-num">1</b>Learn</div>Train a score S<sub>θ</sub>(x, r), convex in the residual r, to make the prediction region as small as possible at the target coverage.</div>
@@ -84,7 +84,7 @@ Conformal prediction (CP) provides distribution-free coverage guarantees under e
   <div class="cc-card"><div class="cc-card-title"><b class="cc-num">3</b>Predict</div>The region {r : S<sub>θ</sub>(x, r) ≤ τ̂<sub>α</sub>} is a convex sublevel set, so membership and volume are easy to compute and use downstream.</div>
 </div>
 
-Two score families are studied. **CoCoNet<sub>ICNN</sub>** uses an input-convex neural network, which can represent smooth convex geometries of any shape. **CoCoNet<sub>Spline</sub>** rotates the residual, applies a convex piecewise-linear score to each coordinate and aggregates them with an ℓ₁ or ℓ∞ norm, giving polygonal regions.
+<p>Two score families are studied. <b>CoCoNet<sub>ICNN</sub></b> uses an input-convex neural network, which can represent smooth convex geometries of any shape. <b>CoCoNet<sub>Spline</sub></b> rotates the residual, applies a convex piecewise-linear score to each coordinate and aggregates them with an ℓ₁ or ℓ∞ norm, giving polygonal regions.</p>
 
 <div class="cc-figure">
   <img src="{{ '/assets/img/papers/coconet/spline.png' | relative_url }}" alt="CoCoNet Spline" loading="lazy">
@@ -93,7 +93,7 @@ Two score families are studied. **CoCoNet<sub>ICNN</sub>** uses an input-convex 
 
 <h2 id="demo">Interactive demo</h2>
 
-Pick a synthetic geometry and a method, press <b>Train</b> to replay how its score is learned (drag the 3-D plot to rotate it at any time), then move α to calibrate. The dashed line is the true smallest region at the same coverage.
+<p>Pick a synthetic geometry and a method, press <b>Train</b> to replay how its score is learned (drag the 3-D plot to rotate it at any time), then move α to calibrate. The dashed line is the true smallest region at the same coverage.</p>
 
 <div id="cc-demo" data-base="{{ '/assets/json/coconet_demo/' | relative_url }}">
   <div class="cc-top"><div id="cc-shapes" class="cc-group"></div></div>
@@ -104,7 +104,7 @@ Pick a synthetic geometry and a method, press <b>Train</b> to replay how its sco
     <span class="cc-step">3&nbsp; Predict</span>
     <button id="cc-train" type="button">▶ Train</button>
   </div>
-  <div id="cc-calib">
+  <div id="cc-calib" class="off">
     <span>α = <b id="cc-alpha-val">0.10</b></span>
     <input id="cc-alpha" type="range" min="0.02" max="0.40" step="0.01" value="0.10" disabled aria-label="alpha">
     <span>target coverage <b id="cc-target">90%</b></span>
@@ -129,7 +129,7 @@ Pick a synthetic geometry and a method, press <b>Train</b> to replay how its sco
   #cc-demo #cc-train { border: 1px solid var(--global-theme-color); color: var(--global-theme-color); background: transparent;
     border-radius: 999px; padding: 3px 14px; font-size: 0.85rem; cursor: pointer; margin-left: auto; }
   #cc-demo #cc-train:disabled { opacity: 0.5; cursor: default; }
-  #cc-demo #cc-calib { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 0.85rem; transition: opacity 0.3s; }
+  #cc-demo #cc-calib { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 0.85rem; }
   #cc-demo #cc-calib.off { opacity: 0.35; pointer-events: none; }
   #cc-demo input[type="range"] { flex: 1; min-width: 140px; max-width: 320px; accent-color: var(--global-theme-color); }
   #cc-demo .cc-toggle { margin: 0 0 0 auto; cursor: pointer; }
@@ -142,7 +142,7 @@ Pick a synthetic geometry and a method, press <b>Train</b> to replay how its sco
 <script src="https://cdn.jsdelivr.net/npm/plotly.js@3.0.1/dist/plotly.min.js" integrity="sha256-oy6Be7Eh6eiQFs5M7oXuPxxm9qbJXEtTpfSI93dW16Q=" crossorigin="anonymous"></script>
 <script src="{{ '/assets/js/coconet_demo.js' | relative_url }}"></script>
 
-## Results
+<h2>Results</h2>
 
 <div class="cc-stats">
   <div class="cc-stat"><div class="v">30</div><div class="l">regression tasks<br>output dim. 2–16</div></div>
