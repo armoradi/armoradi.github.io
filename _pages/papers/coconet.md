@@ -27,35 +27,54 @@ _Figures coming soon._
 
 ## Demo
 
-Pick a synthetic geometry and a method, then move α. The threshold τ̂ is the split-conformal quantile of the calibration scores, so the prediction region {r : S(x, r) ≤ τ̂} grows or shrinks with the target coverage 1 − α. The dashed line is the true (smallest) region at the same coverage.
+Train a CoCoNet score on a synthetic geometry, then calibrate it: the threshold τ<sub>α</sub> is the split-conformal quantile of the calibration scores, and the prediction region is {r : S(x, r) ≤ τ<sub>α</sub>}. The dashed line is the true (smallest) region at the same coverage.
 
 <style>
-  #cc-demo .cc-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 8px; }
-  #cc-demo .cc-label { min-width: 80px; font-weight: 600; }
-  #cc-demo .cc-btn { border: 1px solid var(--global-divider-color); background: transparent; color: var(--global-text-color);
-    border-radius: 4px; padding: 3px 10px; font-size: 0.9rem; cursor: pointer; }
-  #cc-demo .cc-btn.active { background: var(--global-theme-color); border-color: var(--global-theme-color); color: #fff; }
-  #cc-demo input[type="range"] { flex: 1; min-width: 160px; max-width: 360px; accent-color: var(--global-theme-color); }
-  #cc-demo #cc-stats { font-size: 0.9rem; margin: 4px 0 6px; }
-  #cc-demo .cc-plots { display: grid; grid-template-columns: 1.15fr 1fr; gap: 8px; }
-  #cc-demo .cc-plot { height: 420px; min-width: 0; }
-  @media (max-width: 768px) { #cc-demo .cc-plots { grid-template-columns: 1fr; } #cc-demo .cc-plot { height: 360px; } }
+  #cc-demo { border: 1px solid var(--global-divider-color); border-radius: 10px; padding: 16px 18px 8px; margin: 8px 0 6px; }
+  #cc-demo .cc-top { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between; }
+  #cc-demo .cc-group { display: inline-flex; border: 1px solid var(--global-divider-color); border-radius: 999px; overflow: hidden; }
+  #cc-demo .cc-seg { border: 0; background: transparent; color: var(--global-text-color); padding: 4px 13px; font-size: 0.86rem; cursor: pointer; }
+  #cc-demo .cc-seg + .cc-seg { border-left: 1px solid var(--global-divider-color); }
+  #cc-demo .cc-seg.on { background: var(--global-theme-color); color: #fff; }
+  #cc-demo .cc-steps { display: flex; align-items: center; gap: 10px; margin: 14px 0 4px; font-size: 0.85rem; flex-wrap: wrap; }
+  #cc-demo .cc-step { opacity: 0.4; letter-spacing: 0.02em; }
+  #cc-demo .cc-step.on { opacity: 1; font-weight: 600; }
+  #cc-demo .cc-step.past { opacity: 0.7; }
+  #cc-demo .cc-arrow { opacity: 0.35; }
+  #cc-demo #cc-train { border: 1px solid var(--global-theme-color); color: var(--global-theme-color); background: transparent;
+    border-radius: 999px; padding: 3px 14px; font-size: 0.85rem; cursor: pointer; margin-left: auto; }
+  #cc-demo #cc-train:disabled { opacity: 0.5; cursor: default; }
+  #cc-demo #cc-calib { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 0.85rem; transition: opacity 0.3s; }
+  #cc-demo #cc-calib.off { opacity: 0.35; pointer-events: none; }
+  #cc-demo input[type="range"] { flex: 1; min-width: 140px; max-width: 320px; accent-color: var(--global-theme-color); }
+  #cc-demo #cc-status { font-size: 0.82rem; opacity: 0.8; min-height: 1.4em; margin: 6px 0 0; }
+  #cc-demo .cc-plots { display: grid; grid-template-columns: 1.1fr 1fr; gap: 4px; }
+  #cc-demo .cc-plot { height: 380px; min-width: 0; }
+  @media (max-width: 768px) { #cc-demo .cc-plots { grid-template-columns: 1fr; } #cc-demo .cc-plot { height: 320px; } }
 </style>
 
 <div id="cc-demo" data-base="{{ '/assets/json/coconet_demo/' | relative_url }}">
-  <div class="cc-row"><span class="cc-label">Geometry</span><span id="cc-shapes" class="cc-row" style="margin:0"></span></div>
-  <div class="cc-row"><span class="cc-label">Method</span><span id="cc-methods" class="cc-row" style="margin:0"></span></div>
-  <div class="cc-row"><span class="cc-label">α = <span id="cc-alpha-val">0.10</span></span>
-    <input id="cc-alpha" type="range" min="0.02" max="0.40" step="0.01" value="0.10">
-    <span>target coverage <b id="cc-target">90%</b></span></div>
-  <div id="cc-stats"></div>
+  <div class="cc-top"><div id="cc-shapes" class="cc-group"></div><div id="cc-methods" class="cc-group"></div></div>
+  <div class="cc-steps">
+    <span class="cc-step">1&nbsp; Train</span><span class="cc-arrow">→</span>
+    <span class="cc-step">2&nbsp; Calibrate</span><span class="cc-arrow">→</span>
+    <span class="cc-step">3&nbsp; Predict</span>
+    <button id="cc-train" type="button">▶ Train</button>
+  </div>
+  <div id="cc-calib">
+    <span>α = <b id="cc-alpha-val">0.10</b></span>
+    <input id="cc-alpha" type="range" min="0.02" max="0.40" step="0.01" value="0.10" disabled>
+    <span>coverage target <b id="cc-target">90%</b></span>
+    <label style="margin:0 0 0 auto; cursor:pointer"><input id="cc-base" type="checkbox"> compare baselines</label>
+  </div>
+  <div id="cc-status"></div>
   <div class="cc-plots"><div id="cc-3d" class="cc-plot"></div><div id="cc-set" class="cc-plot"></div></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/plotly.js@3.0.1/dist/plotly.min.js" integrity="sha256-oy6Be7Eh6eiQFs5M7oXuPxxm9qbJXEtTpfSI93dW16Q=" crossorigin="anonymous"></script>
 <script src="{{ '/assets/js/coconet_demo.js' | relative_url }}"></script>
 
-<small>Models are the paper's synthetic runs (one seed per geometry); scores are shown at a fixed input x and scaled so that τ̂ = 1 at α = 0.1.</small>
+<small>The paper's synthetic runs, one seed per geometry. Training replays saved per-epoch weights, and each epoch is shown at its own 90% threshold. Scores are drawn at a fixed input x and scaled so that τ<sub>α</sub> = 1 at α = 0.1.</small>
 
 ## Citation
 
