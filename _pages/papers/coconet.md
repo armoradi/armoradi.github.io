@@ -102,7 +102,7 @@ nav: false
     <span class="cc-step">1&nbsp; Train</span><span class="cc-arrow">→</span>
     <span class="cc-step">2&nbsp; Calibrate</span><span class="cc-arrow">→</span>
     <span class="cc-step">3&nbsp; Predict</span>
-    <button id="cc-train" type="button">▶ Train</button>
+    <span class="cc-btns"><button id="cc-train" type="button">▶ Train</button><button id="cc-reset" type="button">↺ Reset</button></span>
   </div>
   <div id="cc-calib" class="off">
     <span>α = <b id="cc-alpha-val">0.10</b></span>
@@ -126,9 +126,11 @@ nav: false
   #cc-demo .cc-step.on { opacity: 1; font-weight: 600; }
   #cc-demo .cc-step.past { opacity: 0.7; }
   #cc-demo .cc-arrow { opacity: 0.35; }
-  #cc-demo #cc-train { border: 1px solid var(--global-theme-color); color: var(--global-theme-color); background: transparent;
-    border-radius: 999px; padding: 3px 14px; font-size: 0.85rem; cursor: pointer; margin-left: auto; }
-  #cc-demo #cc-train:disabled { opacity: 0.5; cursor: default; }
+  #cc-demo .cc-btns { margin-left: auto; display: inline-flex; gap: 6px; }
+  #cc-demo .cc-btns button { border: 1px solid var(--global-theme-color); color: var(--global-theme-color); background: transparent;
+    border-radius: 999px; padding: 3px 14px; font-size: 0.85rem; cursor: pointer; }
+  #cc-demo #cc-reset { border-color: var(--global-divider-color); color: var(--global-text-color); }
+  #cc-demo .cc-btns button:disabled { opacity: 0.4; cursor: default; }
   #cc-demo #cc-calib { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 0.85rem; }
   #cc-demo #cc-calib.off { opacity: 0.35; pointer-events: none; }
   #cc-demo input[type="range"] { flex: 1; min-width: 140px; max-width: 320px; accent-color: var(--global-theme-color); }

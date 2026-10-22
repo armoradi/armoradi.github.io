@@ -16,7 +16,6 @@
   const PLAIN = { ICNN: "CoCoNet ICNN", SplineL1: "CoCoNet Spline-ℓ₁", Spline: "CoCoNet Spline-ℓ∞", MVCS: "MVCS", GlobEll: "G-Ellip." };
   const C_IN = "#3b6fd4", C_OUT = "#d1495b", C_PT = "#9aa3ad", C_TRUE = "#b8860b";
   const PLAY_MS = 4500;                       // a training replay lasts about this long, whatever its frame count
-  const ZMAX = 2.5;
   const cache = {};
   const state = { shape: "triangle", method: "ICNN", alpha: 0.1, phase: "idle", frame: 0, all: false };
   let timer = null;
@@ -25,16 +24,13 @@
   const fmt = (v, d = 3) => Number(v).toFixed(d);
 
   // ---------------------------------------------------------------- data
-  function decode(b64, n, cap, bytes) {
-    const bin = atob(b64), u = new Uint8Array(bin.length);
+  function decode(g, n) {                     // uint16 over the grid's own range [0, g.max]: the full, uncapped score
+    const bin = atob(g.z), u = new Uint8Array(bin.length);
     for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
-    const top = bytes === 2 ? 65535 : 255, dv = new DataView(u.buffer), out = [];
+    const dv = new DataView(u.buffer), out = [];
     for (let r = 0; r < n; r++) {
       const row = new Array(n);
-      for (let c = 0; c < n; c++) {
-        const k = r * n + c;
-        row[c] = ((bytes === 2 ? dv.getUint16(2 * k, true) : u[k]) / top) * cap;
-      }
+      for (let c = 0; c < n; c++) row[c] = (dv.getUint16(2 * (r * n + c), true) / 65535) * g.max;
       out.push(row);
     }
     return out;
@@ -45,8 +41,9 @@
       cache[shape] = fetch(base + shape + ".json").then((r) => r.json()).then((d) => {
         const n = d.x.length, nt = d.xt.length;
         for (const m of Object.values(d.methods)) {
-          m.grid = decode(m.Z, n, d.z_cap, 2);
-          if (m.train) m.train.grids = m.train.Z.map((z) => decode(z, nt, d.zt_cap, 1));
+          m.grid = decode(m.Z, n);
+          if (m.train) m.train.grids = m.train.Z.map((z) => decode(z, nt));
+          m.zmax = Math.max(m.Z.max, ...(m.train ? m.train.Z.map((z) => z.max) : []));   // one z-range per method
         }
         return d;
       });
@@ -77,9 +74,9 @@
     });
     $("cc-alpha").disabled = p !== "done";
     $("cc-calib").classList.toggle("off", p !== "done");
-    const go = trained ? "▶ Train" : "▶ Fit";
-    $("cc-train").textContent = p === "train" ? "Training…" : p === "done" ? (trained ? "↺ Replay" : "↺ Refit") : go;
+    $("cc-train").textContent = p === "train" ? "Training…" : "▶ Train";
     $("cc-train").disabled = p === "train";
+    $("cc-reset").disabled = p === "idle";
   }
 
   function reset() {
@@ -92,7 +89,7 @@
     const d = await load(state.shape), tr = d.methods[state.method].train;
     clearInterval(timer);
     state.frame = 0;
-    if (!tr) { await setPhase("done"); draw(); return; }          // closed-form fit: nothing to replay
+    if (!tr) { await setPhase("done"); draw(); return; }          // G-Ellip.: closed form, no epochs to replay
     await setPhase("train");
     draw();
     timer = setInterval(async () => {
@@ -138,9 +135,8 @@
     $("cc-target").textContent = Math.round(100 * (1 - state.alpha)) + "%";
     const trueA = fmt(polyArea(truth), 2);
     if (state.phase === "idle") {
-      $("cc-status").innerHTML = tr
-        ? `Press <b>▶ Train</b> to watch ${PLAIN[state.method]} learn its score (shown at the 90% level).`
-        : `${PLAIN[state.method]} has no training: its ellipsoid is the mean and covariance of the residuals, fitted in closed form. Press <b>▶ Fit</b>.`;
+      $("cc-status").innerHTML = `Press <b>▶ Train</b> to train ${PLAIN[state.method]}` +
+        (tr ? " and watch its score being learned (shown at the 90% level)." : " (its ellipsoid is fitted in one step).");
     } else if (state.phase === "train") {
       $("cc-status").innerHTML = `epoch <b>${tr.epochs[k]}</b> / ${tr.epochs[tr.epochs.length - 1]} &nbsp;·&nbsp; ` +
         `90% region area <b>${fmt(tr.area[k], 2)}</b> &nbsp;(true ${trueA})`;
@@ -154,10 +150,10 @@
     d.pts.forEach(([a, b], i) => { const g = training || m.h[i] <= tau ? pin : pout; g.x.push(a); g.y.push(b); });
     const cIn = training ? C_PT : C_IN;
 
-    // 3-D: score surface, its level set (projected on the floor) and the threshold plane once calibrated
-    const Zs = Z.map((r) => r.map((v) => Math.min(v, ZMAX)));
+    // 3-D: the full score surface (no cap), its level set projected on the floor, the threshold plane once calibrated
+    const zmax = m.zmax;
     const s3 = [
-      { type: "surface", x, y: x, z: Zs, cmin: 0, cmax: ZMAX, showscale: false, opacity: 0.95, hoverinfo: "skip",
+      { type: "surface", x, y: x, z: Z, cmin: 0, cmax: zmax, showscale: false, opacity: 0.95, hoverinfo: "skip",
         colorscale: [[0, "#ffffff"], [0.5, tint(m.color, 0.25)], [1, tint(m.color, 0.55)]],
         lighting: { ambient: 0.75, diffuse: 0.5, specular: 0.05 },
         contours: { z: { show: true, start: tau, end: tau + 1e-4, size: 1e-3, color: m.color, width: 5, project: { z: true } },
@@ -176,7 +172,7 @@
     Plotly.react($("cc-3d"), s3, {
       uirevision: state.shape,                   // keep the user's rotation across frames, methods and alpha
       margin: { l: 0, r: 0, t: 0, b: 0 }, paper_bgcolor: "rgba(0,0,0,0)", showlegend: false,
-      scene: { uirevision: state.shape, xaxis: ax("r₁"), yaxis: ax("r₂"), zaxis: Object.assign(ax("score"), { range: [0, ZMAX] }),
+      scene: { uirevision: state.shape, xaxis: ax("r₁"), yaxis: ax("r₂"), zaxis: Object.assign(ax("score"), { range: [0, zmax] }),
                camera: { eye: { x: 1.45, y: -1.45, z: 0.85 } }, aspectmode: "manual", aspectratio: { x: 1, y: 1, z: 0.65 },
                dragmode: "turntable" },
     }, { displayModeBar: false, responsive: true, scrollZoom: false });
@@ -214,6 +210,11 @@
   segmented("cc-shapes", SHAPES, "shape");
   segmented("cc-methods", METHODS, "method");
   $("cc-train").onclick = train;
+  $("cc-reset").onclick = () => {
+    state.alpha = 0.1; $("cc-alpha").value = "0.10";
+    state.all = false; $("cc-all").checked = false;
+    reset();
+  };
   $("cc-alpha").oninput = (e) => { state.alpha = Math.round(parseFloat(e.target.value) * 100) / 100; draw(); };
   $("cc-all").onchange = (e) => { state.all = e.target.checked; draw(); };
   new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
