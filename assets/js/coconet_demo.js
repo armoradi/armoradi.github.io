@@ -207,7 +207,9 @@
       s3.push({ type: "scatter3d", mode: "lines", x: lx, y: ly, z: fz(ln.length).map(() => tau), hoverinfo: "skip",
                 line: { color: m.color, width: 7 } });
       s3.push({ type: "scatter3d", mode: "lines", x: lx, y: ly, z: fz(ln.length), hoverinfo: "skip",
-                line: { color: m.color, width: 5 }, surfaceaxis: 2, surfacecolor: m.color, opacity: 0.9 });
+                line: { color: m.color, width: 0.1 }, surfaceaxis: 2, surfacecolor: m.color, opacity: 0.22 });
+      s3.push({ type: "scatter3d", mode: "lines", x: lx, y: ly, z: fz(ln.length), hoverinfo: "skip",
+                line: { color: m.color, width: 5 } });
     });
     const pane = "#f1f1f1";
     const ax = (title) => ({ title: { text: title, font: { size: 12, color: t.text } }, showgrid: true, gridcolor: "#d9d9d9",
