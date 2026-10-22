@@ -12,4 +12,4 @@ SC Workshop on Best Practices for HPC Training and Education, 2026
 
 ## Citation
 
-{% bibliography --query @*[key=jezghani2026jupyterhub] %}
+{% bibliography --group_by none --query @*[key=jezghani2026jupyterhub] %}

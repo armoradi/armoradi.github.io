@@ -18,4 +18,4 @@ Artificial intelligence (AI) is increasingly used to support renewable energy fo
 
 ## Citation
 
-{% bibliography --query @*[key=moradi2025cacp] %}
+{% bibliography --group_by none --query @*[key=moradi2025cacp] %}

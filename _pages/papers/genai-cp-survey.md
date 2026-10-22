@@ -14,4 +14,4 @@ Under review, 2026
 
 ## Citation
 
-{% bibliography --query @*[key=bruys2026survey] %}
+{% bibliography --group_by none --query @*[key=bruys2026survey] %}

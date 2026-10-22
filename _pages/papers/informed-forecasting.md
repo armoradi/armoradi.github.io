@@ -18,4 +18,4 @@ The rapid adoption of large language models (LLMs) has sparked growing interest 
 
 ## Citation
 
-{% bibliography --query @*[key=ghasemloo2026informed] %}
+{% bibliography --group_by none --query @*[key=ghasemloo2026informed] %}

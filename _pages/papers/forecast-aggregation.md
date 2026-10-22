@@ -18,4 +18,4 @@ Accurate and reliable forecasting of renewable energy generation is crucial for 
 
 ## Citation
 
-{% bibliography --query @*[key=moradi2025aggregation] %}
+{% bibliography --group_by none --query @*[key=moradi2025aggregation] %}

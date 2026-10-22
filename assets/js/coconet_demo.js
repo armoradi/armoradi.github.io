@@ -149,6 +149,17 @@
     return lines;
   }
 
+  // the learned spline axes z_1, z_2 (columns of Q(x)) as segments through the origin; null for non-spline methods
+  function axesAngle(m, training, k) {
+    if (!m.train || !m.train.rot) return null;
+    return training ? m.train.rot[k] : m.train.rot[m.train.rot.length - 1];
+  }
+  function axesLines(deg, L) {
+    const a = (deg * Math.PI) / 180, b = a + Math.PI / 2;
+    return [[[-L * Math.cos(a), L * Math.cos(a)], [-L * Math.sin(a), L * Math.sin(a)], "z₁", "#9c5a4f"],
+            [[-L * Math.cos(b), L * Math.cos(b)], [-L * Math.sin(b), L * Math.sin(b)], "z₂", "#4f6b8a"]];
+  }
+
   const level = (x, Z, tau, color, width, dash, name, legend) => ({
     type: "contour", x, y: x, z: Z, showscale: false, hoverinfo: "skip", name, showlegend: legend,
     contours: { coloring: "none", start: tau, end: tau + 1e-4, size: 1e-3 }, line: { color, width, dash },
@@ -171,8 +182,11 @@
       $("cc-status").innerHTML = `Press <b>▶ Train</b> to train ${PLAIN[state.method]}` +
         (tr ? " and watch its score being learned (shown at the 90% level)." : " (its ellipsoid is fitted in one step).");
     } else if (state.phase === "train") {
-      $("cc-status").innerHTML = `epoch <b>${tr.epochs[k]}</b> / ${tr.epochs[tr.epochs.length - 1]} &nbsp;·&nbsp; ` +
-        `90% region area <b>${fmt(tr.area[k], 2)}</b> &nbsp;(true ${trueA})`;
+      const rotTxt = tr.rot ? ` &nbsp;·&nbsp; rotation <b>${fmt(tr.rot[k], 0)}°</b>` : "";
+      $("cc-status").innerHTML = (k < (tr.n_pre || 0)
+        ? `start: axes aligned (Q = I), the rotation begins to turn`
+        : `epoch <b>${tr.epochs[k]}</b> / ${tr.epochs[tr.epochs.length - 1]}`) + rotTxt +
+        ` &nbsp;·&nbsp; 90% region area <b>${fmt(tr.area[k], 2)}</b> &nbsp;(true ${trueA})`;
     } else {
       $("cc-status").innerHTML = `τ̂<sub>α</sub> = <b>${fmt(tau)}</b> &nbsp;·&nbsp; coverage <b>${fmt(100 * m.cov[ia], 1)}%</b>` +
         ` &nbsp;·&nbsp; area <b>${fmt(m.area[ia], 2)}</b> &nbsp;(true ${trueA})`;
@@ -211,6 +225,13 @@
       s3.push({ type: "scatter3d", mode: "lines", x: lx, y: ly, z: fz(ln.length), hoverinfo: "skip",
                 line: { color: m.color, width: 5 } });
     });
+    const rot = axesAngle(m, training, k);
+    if (rot !== null) {
+      axesLines(rot, 0.92 * Math.max(Math.abs(x[0]), Math.abs(x[x.length - 1]))).forEach(([lx, ly, name, c]) => {
+        s3.push({ type: "scatter3d", mode: "lines+text", x: lx, y: ly, z: [floor, floor], hoverinfo: "skip",
+                  text: ["", name], textposition: "middle right", textfont: { size: 12, color: c }, line: { color: c, width: 4 } });
+      });
+    }
     const pane = "#f1f1f1";
     const ax = (title) => ({ title: { text: title, font: { size: 12, color: t.text } }, showgrid: true, gridcolor: "#d9d9d9",
                              zeroline: false, showbackground: true, backgroundcolor: pane, showspikes: false,
@@ -239,6 +260,12 @@
         const b = d.methods[key];
         if (!b || key === state.method) return;
         s2.push(level(d.x, b.grid, b.tau[ia], b.color, 1.6, "dot", PLAIN[key], true));
+      });
+    }
+    if (rot !== null) {
+      axesLines(rot, 0.92 * Math.max(Math.abs(d.x[0]), Math.abs(d.x[d.x.length - 1]))).forEach(([lx, ly, name, c]) => {
+        s2.push({ type: "scatter", mode: "lines+text", x: lx, y: ly, hoverinfo: "skip", showlegend: false,
+                  text: ["", name], textposition: "top right", textfont: { size: 13, color: c }, line: { color: c, width: 1.5 } });
       });
     }
     const tx = truth.map((p) => p[0]).concat([truth[0][0]]), ty = truth.map((p) => p[1]).concat([truth[0][1]]);

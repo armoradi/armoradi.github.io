@@ -14,4 +14,4 @@ nav: false
 
 ## Citation
 
-{% bibliography --query @*[key=moradi2026ress] %}
+{% bibliography --group_by none --query @*[key=moradi2026ress] %}
