@@ -14,25 +14,7 @@ Mohammadmahdi Ghasemloo, **Alireza Moradi**
 
 ## Abstract
 
-With the widespread adoption of Large Language Models (LLMs), there is a growing need to establish best practices for leveraging their capabilities beyond traditional natural language tasks. In this paper, a novel cross-domain knowledge transfer framework is proposed to enhance the performance of LLMs in time series forecasting -- a task of increasing relevance in fields such as energy systems, finance, and healthcare. The approach systematically infuses LLMs with structured temporal information to improve their forecasting accuracy. This study evaluates the proposed method on a real-world time series dataset and compares it to a naive baseline where the LLM receives no auxiliary information. Results show that knowledge-informed forecasting significantly outperforms the uninformed baseline in terms of predictive accuracy and generalization. These findings highlight the potential of knowledge transfer strategies to bridge the gap between LLMs and domain-specific forecasting tasks.
-
-## Figures
-
-<!--
-Put image files in assets/img/papers/informed-forecasting/ and add one line per figure, e.g.:
-{% include figure.liquid path="assets/img/papers/informed-forecasting/figure1.png" class="img-fluid rounded z-depth-1" zoomable=true caption="Caption text." %}
--->
-
-_Figures coming soon._
-
-## Demo
-
-<!--
-Embed a demo here: a video ({% include video.liquid path="assets/video/demo.mp4" controls=true %}),
-an animated GIF via figure.liquid, or an iframe to a hosted app (Hugging Face Space, Colab, etc.).
--->
-
-_Demo coming soon._
+The rapid adoption of large language models (LLMs) has sparked growing interest in extending their capabilities beyond traditional natural language tasks, including applications in time series forecasting. This work explores the enhancement of time series forecasting with LLMs by incorporating time-dependent covariates. We propose a set of representative prompting strategies that span a wide range of formats while incorporating covariates, and then implement the proposed framework to evaluate performance across three real-world time series datasets in healthcare, service operations, and transportation. In our experiments, we use GPT-4o-mini and show that incorporating relevant covariate information through an appropriate prompt design can substantially improve forecasting accuracy, reducing prediction errors by up to 70% compared with the no-covariate baseline. Furthermore, the analysis reveals that both the choice of covariate and the prompt structure are critical, as poorly aligned configurations may degrade performance. Finally, we conduct sensitivity analyses to assess the effect of covariate integration in censored settings and quantify uncertainty, confirming that our method achieves statistically significant improvements over existing approaches. These findings underscore the potential of covariate integration in prompt design to bridge the gap between general-purpose LLMs and forecasting tasks.
 
 ## Citation
 
