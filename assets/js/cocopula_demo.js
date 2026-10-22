@@ -113,9 +113,9 @@
 
     const ymax = Math.max(...hi, ...y, ...(state.nrel ? band("nrel")[1] : [])) * 1.08;
     Plotly.react($("cp-plot"), traces, {
-      margin: { l: 56, r: 12, t: 8, b: 44 }, paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
+      margin: { l: 56, r: 12, t: 8, b: 64 }, paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
       font: { color: t.text, size: 12 },
-      xaxis: { title: { text: "Hour (CST)" }, tickvals: x, ticktext: x.map((h) => h + ":00"), tickangle: -45, gridcolor: t.grid, zeroline: false },
+      xaxis: { title: { text: "Hour (CST)", standoff: 14 }, tickvals: x, ticktext: x.map((h) => h + ":00"), tickangle: -45, gridcolor: t.grid, zeroline: false },
       yaxis: { title: { text: "Normalized generation" }, range: [0, Math.max(ymax, 0.05)], gridcolor: t.grid, zeroline: false },
       legend: { orientation: "h", x: 0, y: 1.0, yanchor: "bottom", font: { size: 11 } },
       transition: { duration: 350, easing: "cubic-in-out" },
