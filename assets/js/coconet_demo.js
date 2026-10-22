@@ -15,6 +15,7 @@
   ];
   const PLAIN = { ICNN: "CoCoNet ICNN", SplineL1: "CoCoNet Spline-ℓ₁", Spline: "CoCoNet Spline-ℓ∞", MVCS: "MVCS", GlobEll: "G-Ellip." };
   const C_IN = "#3b6fd4", C_OUT = "#d1495b", C_PT = "#9aa3ad", C_TRUE = "#b8860b";
+  const ZCUT = 2;                             // the surface is cut (not flattened) above 2x the 90% threshold, as in the paper
   const PLAY_MS = 4500;                       // a training replay lasts about this long, whatever its frame count
   const cache = {};
   const state = { shape: "triangle", method: "ICNN", alpha: 0.1, phase: "idle", frame: 0, all: false };
@@ -43,7 +44,6 @@
         for (const m of Object.values(d.methods)) {
           m.grid = decode(m.Z, n);
           if (m.train) m.train.grids = m.train.Z.map((z) => decode(z, nt));
-          m.zmax = Math.max(m.Z.max, ...(m.train ? m.train.Z.map((z) => z.max) : []));   // one z-range per method
         }
         return d;
       });
@@ -111,9 +111,42 @@
     return Math.abs(a) / 2;
   }
 
-  function tint(hex, w) {
-    const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
-    return `rgb(${c.map((v) => Math.round(255 - w * (255 - v))).join(",")})`;
+  // the level set {Z = lev} on the grid (x, x) as closed or open polylines: marching squares, then chained segments
+  function isolines(x, Z, lev) {
+    const n = x.length, segs = [], key = (p) => p[0].toFixed(6) + "," + p[1].toFixed(6);
+    const at = (i, j, k, l) => { const a = Z[i][j], b = Z[k][l], t = (lev - a) / (b - a);
+                                 return [x[j] + t * (x[l] - x[j]), x[i] + t * (x[k] - x[i])]; };
+    for (let i = 0; i < n - 1; i++) for (let j = 0; j < n - 1; j++) {
+      const c = [Z[i][j], Z[i][j + 1], Z[i + 1][j + 1], Z[i + 1][j]];
+      if (c.some((v) => v == null || !isFinite(v))) continue;
+      const e = [];
+      if ((c[0] < lev) !== (c[1] < lev)) e.push(at(i, j, i, j + 1));
+      if ((c[1] < lev) !== (c[2] < lev)) e.push(at(i, j + 1, i + 1, j + 1));
+      if ((c[3] < lev) !== (c[2] < lev)) e.push(at(i + 1, j, i + 1, j + 1));
+      if ((c[0] < lev) !== (c[3] < lev)) e.push(at(i, j, i + 1, j));
+      if (e.length === 2) segs.push(e);
+      else if (e.length === 4) { segs.push([e[0], e[1]]); segs.push([e[2], e[3]]); }
+    }
+    const ends = new Map();
+    segs.forEach((sg, k) => sg.forEach((p) => { const q = key(p); (ends.get(q) || ends.set(q, []).get(q)).push(k); }));
+    const used = new Array(segs.length).fill(false), lines = [];
+    for (let k0 = 0; k0 < segs.length; k0++) {
+      if (used[k0]) continue;
+      used[k0] = true;
+      const line = [segs[k0][0], segs[k0][1]];
+      for (const fwd of [true, false]) {
+        for (;;) {
+          const tip = fwd ? line[line.length - 1] : line[0];
+          const nx = (ends.get(key(tip)) || []).find((k) => !used[k]);
+          if (nx === undefined) break;
+          used[nx] = true;
+          const sg = segs[nx], p = key(sg[0]) === key(tip) ? sg[1] : sg[0];
+          fwd ? line.push(p) : line.unshift(p);
+        }
+      }
+      lines.push(line);
+    }
+    return lines;
   }
 
   const level = (x, Z, tau, color, width, dash, name, legend) => ({
@@ -150,30 +183,42 @@
     d.pts.forEach(([a, b], i) => { const g = training || m.h[i] <= tau ? pin : pout; g.x.push(a); g.y.push(b); });
     const cIn = training ? C_PT : C_IN;
 
-    // 3-D: the full score surface (no cap), its level set projected on the floor, the threshold plane once calibrated
-    const zmax = m.zmax;
+    // 3-D, in the paper's style: a grey wireframe of the score, cut (not flattened) above ZCUT, blue level curves on the
+    // surface and projected on the floor, the region boundary in the method's colour on both, the filled region and the
+    // calibration residuals on the floor.
+    const zcut = Math.max(ZCUT, 1.25 * Math.max(...m.tau)), floor = -0.35 * zcut;
+    const Zc = Z.map((r) => r.map((v) => (v > zcut ? null : v)));
+    const span = x[x.length - 1] - x[0], mesh = span / 18;
+    const wire = { show: true, start: x[0], end: x[x.length - 1], size: mesh, color: "#9a9a9a", width: 1, highlight: false };
+    const fz = (n) => new Array(n).fill(floor);
     const s3 = [
-      { type: "surface", x, y: x, z: Z, cmin: 0, cmax: zmax, showscale: false, opacity: 0.95, hoverinfo: "skip",
-        colorscale: [[0, "#ffffff"], [0.5, tint(m.color, 0.25)], [1, tint(m.color, 0.55)]],
-        lighting: { ambient: 0.75, diffuse: 0.5, specular: 0.05 },
-        contours: { z: { show: true, start: tau, end: tau + 1e-4, size: 1e-3, color: m.color, width: 5, project: { z: true } },
-                    x: { highlight: false }, y: { highlight: false } } },
-      { type: "scatter3d", mode: "markers", x: pin.x, y: pin.y, z: pin.x.map(() => 0), hoverinfo: "skip",
-        marker: { size: 1.6, color: cIn, opacity: 0.8 } },
-      { type: "scatter3d", mode: "markers", x: pout.x, y: pout.y, z: pout.x.map(() => 0), hoverinfo: "skip",
-        marker: { size: 1.6, color: C_OUT, opacity: 0.8 } },
+      { type: "surface", x, y: x, z: Zc, showscale: false, hoverinfo: "skip", opacity: 0.12, cmin: 0, cmax: zcut,
+        colorscale: [[0, "#08306b"], [0.45, "#2171b5"], [1, "#9ecae1"]], lighting: { ambient: 1, diffuse: 0, specular: 0 },
+        contours: { x: wire, y: wire,
+                    z: { show: true, start: zcut / 14, end: zcut, size: zcut / 14, usecolormap: true, width: 2, highlight: false,
+                         project: { z: true } } } },
+      { type: "scatter3d", mode: "markers", x: pin.x, y: pin.y, z: fz(pin.x.length), hoverinfo: "skip",
+        marker: { size: 1.4, color: training ? "#9aa3ad" : C_IN, opacity: 0.7 } },
+      { type: "scatter3d", mode: "markers", x: pout.x, y: pout.y, z: fz(pout.x.length), hoverinfo: "skip",
+        marker: { size: 1.4, color: C_OUT, opacity: 0.7 } },
     ];
-    if (!training) {
-      s3.push({ type: "surface", x, y: x, z: x.map(() => x.map(() => tau)), showscale: false, opacity: 0.22, hoverinfo: "skip",
-                colorscale: [[0, "#e0a526"], [1, "#e0a526"]] });
-    }
-    const ax = (title) => ({ title: { text: title, font: { size: 13, color: t.text } }, showgrid: false, zeroline: false,
-                             showticklabels: false, showbackground: false, showspikes: false, linecolor: t.line, showline: true });
+    isolines(x, Z, tau).forEach((ln) => {          // the region boundary: on the surface, on the floor, filled on the floor
+      const lx = ln.map((p) => p[0]), ly = ln.map((p) => p[1]);
+      s3.push({ type: "scatter3d", mode: "lines", x: lx, y: ly, z: fz(ln.length).map(() => tau), hoverinfo: "skip",
+                line: { color: m.color, width: 7 } });
+      s3.push({ type: "scatter3d", mode: "lines", x: lx, y: ly, z: fz(ln.length), hoverinfo: "skip",
+                line: { color: m.color, width: 5 }, surfaceaxis: 2, surfacecolor: m.color, opacity: 0.9 });
+    });
+    const pane = "#f1f1f1";
+    const ax = (title) => ({ title: { text: title, font: { size: 12, color: t.text } }, showgrid: true, gridcolor: "#d9d9d9",
+                             zeroline: false, showbackground: true, backgroundcolor: pane, showspikes: false,
+                             tickfont: { size: 9, color: t.text }, nticks: 5, linecolor: t.line });
     Plotly.react($("cc-3d"), s3, {
       uirevision: state.shape,                   // keep the user's rotation across frames, methods and alpha
       margin: { l: 0, r: 0, t: 0, b: 0 }, paper_bgcolor: "rgba(0,0,0,0)", showlegend: false,
-      scene: { uirevision: state.shape, xaxis: ax("r₁"), yaxis: ax("r₂"), zaxis: Object.assign(ax("score"), { range: [0, zmax] }),
-               camera: { eye: { x: 1.45, y: -1.45, z: 0.85 } }, aspectmode: "manual", aspectratio: { x: 1, y: 1, z: 0.65 },
+      scene: { uirevision: state.shape, xaxis: ax("r₁"), yaxis: ax("r₂"),
+               zaxis: Object.assign(ax("score / threshold"), { range: [floor, zcut] }),
+               camera: { eye: { x: 1.5, y: -1.45, z: 0.75 } }, aspectmode: "manual", aspectratio: { x: 1, y: 1, z: 0.8 },
                dragmode: "turntable" },
     }, { displayModeBar: false, responsive: true, scrollZoom: false });
 
