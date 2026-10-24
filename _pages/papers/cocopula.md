@@ -47,7 +47,7 @@ nav: false
   <div class="cc-authors">
     <a href="{{ '/' | relative_url }}"><b>Alireza Moradi</b></a><sup>1,2</sup> &nbsp;·&nbsp;
     Mathieu Tanneau<sup>1,2</sup> &nbsp;·&nbsp;
-    Reza Zandehshahvar<sup>1,2</sup> &nbsp;·&nbsp;
+    <a href="https://www.isye.gatech.edu/users/reza-zandehshahvar">Reza Zandehshahvar</a><sup>1,2</sup> &nbsp;·&nbsp;
     <a href="https://www.isye.gatech.edu/users/pascal-van-hentenryck">Pascal Van Hentenryck</a><sup>1,2</sup>
   </div>
   <div class="cc-affil">

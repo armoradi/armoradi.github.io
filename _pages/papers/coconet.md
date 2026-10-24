@@ -48,7 +48,7 @@ nav: false
     <a href="{{ '/' | relative_url }}"><b>Alireza Moradi</b></a><sup>1,3</sup> &nbsp;·&nbsp;
     Thomas Bruys<sup>2,3</sup> &nbsp;·&nbsp;
     <a href="https://www.isye.gatech.edu/users/pascal-van-hentenryck">Pascal Van Hentenryck</a><sup>1,3</sup> &nbsp;·&nbsp;
-    Reza Zandehshahvar<sup>1,3</sup>
+    <a href="https://www.isye.gatech.edu/users/reza-zandehshahvar">Reza Zandehshahvar</a><sup>1,3</sup>
   </div>
   <div class="cc-affil">
     <sup>1</sup>H. Milton Stewart School of Industrial and Systems Engineering, Georgia Tech &nbsp;
